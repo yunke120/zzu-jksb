@@ -12,10 +12,10 @@ class Notify:
         current_time = datetime.datetime.now().strftime('%Y.%m.%d-%H:%M:%S')
         self.content = {
             "------\n"
-            "### VPN签到信息\n"
-            "- 用户账号：" + str(username) + "\n"
-            "- 签到状态：" + str(msg) + "\n"
-            "- 签到时间：" + current_time
+            "### ZZU健康\n"
+            "- 用户学号：" + str(username) + "\n"
+            "- 打开状态：" + str(msg) + "\n"
+            "- 打卡时间：" + current_time
         }
 
     def server(self, sckey, username, msg):
