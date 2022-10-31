@@ -1,15 +1,15 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: PFvpn Sign
+name: ZZU-JKSB
 
 on:
-  push:
-    branches: [ "main" ]
+  #push:
+  #  branches: [ "main" ]
   # pull_request:
   #   branches: [ "re" ]
   schedule:
-    - cron: 0 6 * * *
+    - cron: 30 0 * * *
 permissions:
   contents: read
 
