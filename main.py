@@ -6,9 +6,12 @@ import json
 import os
 import re
 from notify import Notify
+import ssl
 
-verify_path = False # 默认不开启SSL验证
+# verify_path = False # 默认不开启SSL验证
+ssl._create_default_https_context = ssl._create_unverified_context
 session = requests.session()
+
 
 def read_json(json_file):
     obj = []
@@ -46,7 +49,7 @@ def get_hh28():
         'Referer': 'https://jksb.v.zzu.edu.cn/vls6sss/zzujksb.dll/login',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36'
     }
-    res = session.get(url=url, headers=header, verify=verify_path)
+    res = session.get(url=url, headers=header)
     html = res.text
     soup = BeautifulSoup(html, 'lxml')
     hh28 = soup.find('input',{'name':'hh28'}).get('value')
@@ -68,7 +71,7 @@ def login(user_data, key):
         'hh28':key
     }
     msg = "login failed"
-    res = session.post(url=url, data=data, headers=header, verify=verify_path)
+    res = session.post(url=url, data=data, headers=header)
     if res.status_code != 200:
         return msg
     res.encoding = 'utf-8'
@@ -85,7 +88,7 @@ def login(user_data, key):
     'Referer': 'https://jksb.v.zzu.edu.cn/vls6sss/zzujksb.dll/login',
     'Host': 'jksb.v.zzu.edu.cn'
     }
-    res = session.get(url=url1, headers=header2, verify=verify_path)
+    res = session.get(url=url1, headers=header2)
     res.encoding = 'utf-8'
     html = res.text
     soup = BeautifulSoup(html, 'lxml')
@@ -99,7 +102,7 @@ def get_permit_data(refer, url):
         'Referer': refer,
         'Host': 'jksb.v.zzu.edu.cn'
     }
-    res = session.get(url=url, headers=header, verify=verify_path)
+    res = session.get(url=url, headers=header)
     res.encoding = 'utf-8'
     html = res.text
     soup = BeautifulSoup(html, 'lxml')
@@ -130,7 +133,7 @@ def ready_submit(data, refer):
         'Referer': refer
     }
     url = 'https://jksb.v.zzu.edu.cn/vls6sss/zzujksb.dll/jksb'
-    res = session.post(url=url, data=data, headers=header, verify=verify_path)
+    res = session.post(url=url, data=data, headers=header)
     res.encoding = 'utf-8'
     html = res.text
     soup = BeautifulSoup(html, 'lxml')
@@ -155,7 +158,7 @@ def submit(data):
         'Referer': 'https://jksb.v.zzu.edu.cn/vls6sss/zzujksb.dll/jksb',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36'
     }
-    res = session.post(url=url, data=data, headers=header, verify=verify_path)
+    res = session.post(url=url, data=data, headers=header)
     res.encoding = 'utf-8'
     html = res.text
     soup = BeautifulSoup(html, 'lxml')
