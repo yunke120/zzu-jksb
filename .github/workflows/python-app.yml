@@ -4,8 +4,8 @@
 name: ZZU-JKSB
 
 on:
-  #push:
-  #  branches: [ "main" ]
+  push:
+    branches: [ "main" ]
   # pull_request:
   #   branches: [ "re" ]
   schedule:
