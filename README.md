@@ -207,14 +207,17 @@ $vi /etc/crontab
 
    ![image-20221031104400035](figures/image-20221031104400035.png)
 
-3. 在`Code->.github/workflows`中打开`python-app.yml`文件，任意加一行注释，并重新提交触发Actions即可
+3. 点击进入`Actions`，启用此仓库的工作流
 
-4. 点击进入`Actions`查看工作流是否正常运行，如果今日未打卡过，微信应已经接收到通知信息
+4. 选择`ZZU-JKSB`，点击`Enable workflow`启用
+
+5. 点击`Run workflow->Run workflow`立刻运行，稍等几秒查看工作流是否开始正常运行
 
    ![image-20221031104610020](figures/image-20221031104610020.png)
 
-5. 主校区学生可按照以上步骤直接部署，如果是**其他地区**的，请务必修改文件`submit_data.json`文件中关键参数，参数说明请看上文所述，对文件进行重新编辑后重新提交即可。
-6. 关于**打卡时间**的修改，在`Code->.github/workflows`中打开`python-app.yml`文件，修改方框中的参数，30指的是分钟，18指的是[UTC时间](https://time.is/zh/UTC)，比北京时间慢了接近8小时，所以UTC时间18点指的是北京时间凌晨2点，实际上可能还会有些误差，但我们并不关心。
+6. 主校区学生可按照以上步骤直接部署，如果是**其他地区**的，请务必修改文件`submit_data.json`文件中关键参数，参数说明请看上文所述，对文件进行重新编辑后重新提交即可。
+
+7. 关于**打卡时间**的修改，在`Code->.github/workflows`中打开`python-app.yml`文件，修改方框中的参数，30指的是分钟，18指的是[UTC时间](https://time.is/zh/UTC)，比北京时间慢了接近8小时，所以UTC时间18点指的是北京时间凌晨2点，实际上可能还会有些误差，但我们并不关心。
 
 ![image-20221104195424523](figures/image-20221104195424523.png)
 
