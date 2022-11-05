@@ -18,8 +18,9 @@ class Notify:
             "- 打卡时间：" + current_time
         }
 
-    def server(self, sckey, msg):
+    def server(self, sckey, username, msg):
         self.url = 'https://sctapi.ftqq.com/' + sckey + '.send'
+        self.diy_content(username, msg)
         data = {
             "text":"ZZU每日健康打卡",
             "desp":self.content

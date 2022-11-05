@@ -11,6 +11,8 @@ from notify import Notify
 import time
 from requests import exceptions as ex
 
+
+urllib3.disable_warnings()
 verify_path = False # 默认不开启SSL验证
 # ssl._create_default_https_context = ssl._create_unverified_context
 session = requests.session()
@@ -97,7 +99,7 @@ def login(user_data, key):
     url2 = soup.find('iframe', {'id':'zzj_top_6s'}).get('src')
     return url1, url2
 
-# 获取通行证
+# 获取通行�?
 def get_permit_data(refer, url):
     header = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
@@ -110,7 +112,7 @@ def get_permit_data(refer, url):
     soup = BeautifulSoup(html, 'lxml')
     state = soup.select('#bak_0 > div:nth-child(5) > span')[0].get_text()
     data = dict()
-    if state == "今日您已经填报过了":
+    if state == "今日您已经填报过�?":
         pass
     else:
         input_list = soup.find_all('input')
@@ -126,7 +128,7 @@ def get_permit_data(refer, url):
     return data
 
 
-# 开始填报
+# 开始填�?
 def ready_submit(data, refer):
     header = {
         'Host': 'jksb.v.zzu.edu.cn',
@@ -181,14 +183,14 @@ if __name__ == '__main__':
             hh28 = get_hh28()
             refer, url = login(user, hh28)
             permit_data = get_permit_data(refer, url)
-            if permit_data: # 如果未填报则开始填报
+            if permit_data: # 如果未填报则开始填�?
                 submit_data = ready_submit(data=permit_data, refer=url)
                 submit_data = parse_submit_data(submit_data, 'submit_data.json')
                 result = submit(submit_data)
                 server.server(user['sckey'], user['uid'], result)
             else:
-                print("今日您已经填报过了")
+                print("今日您已经填报过�?")
         except ex.SSLError:
-            result = "打卡失败，请手动打卡！"
+            result = "打卡失败，请手动打卡�?"
             server.server(user['sckey'], user['uid'], result)
         time.sleep(10)
