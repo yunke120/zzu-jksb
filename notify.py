@@ -38,7 +38,18 @@ class Notify:
             "title":"ZZU每日健康打卡",
             "content":self.content
         }
-        requests.post(self.url, data=data, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'})
+        requests.post(self.url, data=data, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+                                                    'Content-Type': 'application/json;charset=UTF-8'})
+
+# 发送接口
+    def send(self, key, username, msg):
+        if key.startswith('SCT'):
+            self.server(key, username, msg)
+        elif key.startswith('XZ'):
+            self.xizhi(key, username, msg)
+        else:
+            pass
+
 
 if __name__ == '__main__':
     send = Notify()
