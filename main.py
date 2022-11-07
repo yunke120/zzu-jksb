@@ -10,11 +10,14 @@ from notify import Notify
 # import ssl
 import time
 from requests import exceptions as ex
+from dotenv import load_dotenv
 
+load_dotenv()  # take environment variables from .env.
 
 urllib3.disable_warnings()
 verify_path = False # 默认不开启SSL验证
 # ssl._create_default_https_context = ssl._create_unverified_context
+
 session = requests.session()
 
 def read_json(json_file):
@@ -25,24 +28,22 @@ def read_json(json_file):
         print(f'{json_file} not found')
     return obj
 
-def get_user_info(json_file):
+def get_users():
     users = []
-    try:
-        USERS = os.environ['UID']
-        PWD = os.environ['UPW']
-        SCKEY = os.environ['SCKEY']
-        user_list = USERS.split('&')
-        pwd_list = PWD.split('&')
-        sckey_list = SCKEY.split('&')
-        # assert len(user_list) == len(pwd_list)
-        for u, p, k in zip(user_list,pwd_list,sckey_list):
-            user = dict()
-            user['uid'] = u
-            user['upw'] = p
-            user['sckey'] = k
-            users.append(user)
-    except KeyError:
-        users = read_json(json_file)
+
+    USERS = os.environ['UID']
+    PWD = os.environ['UPW']
+    SCKEY = os.environ['KEY']
+    user_list = USERS.split('&')
+    pwd_list = PWD.split('&')
+    sckey_list = SCKEY.split('&')
+    # assert len(user_list) == len(pwd_list)
+    for u, p, k in zip(user_list,pwd_list,sckey_list):
+        user = dict()
+        user['uid'] = u
+        user['upw'] = p
+        user['key'] = k
+        users.append(user)
 
     return users
 
@@ -174,23 +175,28 @@ def submit(data):
     # url1 = re.search('\'https.*?\'', str(c))
     # print(url1.group()[1:-1])
 
-
 if __name__ == '__main__':
-    server = Notify()
-    users = get_user_info('user.json')
+    notify = Notify()
+    users = get_users()
+    retry = 5 # 打卡失败重试次数
     for user in users:
         try:
             hh28 = get_hh28()
             refer, url = login(user, hh28)
             permit_data = get_permit_data(refer, url)
-            if permit_data: # 如果未填报则开始填�?
+            if permit_data: # 如果未填报则开始填报
                 submit_data = ready_submit(data=permit_data, refer=url)
                 submit_data = parse_submit_data(submit_data, 'submit_data.json')
                 result = submit(submit_data)
-                server.server(user['sckey'], user['uid'], result)
+                notify.send(user['key'], user['uid'], result)
             else:
                 print("今日您已经填报过了")
         except ex.SSLError:
-            result = "打卡失败，请手动打卡！"
-            server.server(user['sckey'], user['uid'], result)
-        time.sleep(10)
+            retry = retry - 1
+            if retry >= 0:
+                users.append(user) # 打卡失败重试
+            else:
+                result = "SSLError: 打卡失败，请手动打卡！"
+                notify.send(user['key'], user['uid'], result)
+        time.sleep(10) # 账号间打卡间隔10s
+
