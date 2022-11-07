@@ -38,8 +38,7 @@ class Notify:
             "title":"ZZU每日健康打卡",
             "content":self.content
         }
-        requests.post(self.url, data=data, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
-                                                    'Content-Type': 'application/json;charset=UTF-8'})
+        requests.post(self.url, data=data, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'})
 
 # 发送接口
     def send(self, key, username, msg):
@@ -54,4 +53,4 @@ class Notify:
 if __name__ == '__main__':
     send = Notify()
     msg = "今日已打卡"
-    send.xizhi(os.environ['XZKEY'], os.environ['UID'], msg)
+    send.send(os.environ['KEY'], os.environ['UID'], msg)
