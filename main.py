@@ -75,17 +75,17 @@ def login(user_data, key):
         'smbtn':'进入健康状况上报平台',
         'hh28':key
     }
-    msg = "login failed"
+
     res = session.post(url=url, data=data, headers=header, verify=verify_path)
     if res.status_code != 200:
-        return msg
+        return '',''
     res.encoding = 'utf-8'
     html = res.text
     soup = BeautifulSoup(html, 'lxml')
     content = soup.find('script').text
     url1 = re.search('"https.*?"', content)
     if url1 is None:
-        return msg
+        return '',''
 
     url1 = url1.group()[1:-1]
     header2 = {
@@ -189,8 +189,9 @@ if __name__ == '__main__':
                 submit_data = parse_submit_data(submit_data, 'submit_data.json')
                 result = submit(submit_data)
                 notify.send(user['key'], user['uid'], result)
-            else:
-                print("今日您已经填报过了")
+            else: # 已经打过卡也发送通知
+                result = "今日您已经填报过了"
+                notify.send(user['key'], user['uid'], result)
         except ex.SSLError:
             retry = retry - 1
             if retry >= 0:
