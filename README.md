@@ -134,7 +134,7 @@ $touch .env
 | ----- | ------------------------------------------------------------ |
 | `UID` | 用户学号                                                     |
 | `UPW` | 用户密码                                                     |
-| `KEY` | 可选值 ：[Server酱](https://sct.ftqq.com/)密钥；[息知](https://xz.qqoq.net/#/index)密钥 |
+| `KEY` | 可选值 ：[Server酱](https://sct.ftqq.com/)密钥；[息知](https://xz.qqoq.net/#/index)密钥，密钥获取请参考docs文件夹 |
 
 支持多用户，用`&`分隔，示例
 
@@ -174,6 +174,8 @@ $vi /etc/crontab
 
 ### 3. Github Actions（推荐）
 
+<iframe src="https://scribehow.com/embed/Github_Action__kPH0UDb-R_yMNhnYRG8ejw" width="640" height="640" allowfullscreen frameborder="0"></iframe>
+
 1. fork项目到自己的账户中
 
 2. 在`Setting->Secrets->Actions->New respository secret`中添加自己的仓库环境变量
@@ -182,7 +184,7 @@ $vi /etc/crontab
    | ---- | ----- | ------------------------------------------------------------ |
    | 1    | `UID` | 学号，多用户通过&隔开                                        |
    | 2    | `UPW` | 密码，多用户通过&隔开                                        |
-   | 3    | `KEY` | [Server酱](https://sct.ftqq.com/sendkey)密钥或[息知](https://xz.qqoq.net/#/index)密钥，多用户通过&隔开 |
+   | 3    | `KEY` | [Server酱](https://sct.ftqq.com/sendkey)密钥或[息知](https://xz.qqoq.net/#/index)密钥，多用户通过&隔开，密钥获取请参考docs文件夹 |
 
    多用户示例：`2021****&2020****`
 
@@ -194,7 +196,7 @@ $vi /etc/crontab
 
 4. 选择`ZZU-JKSB`，点击`Enable workflow`启用
 
-5. 点击`Run workflow->Run workflow`立刻运行，稍等几秒查看工作流是否开始正常运行
+5. 点击`Run workflow->Run workflow`立刻运行，稍等几秒查看工作流是否开始正常运行，具体步骤可参考[开启工作流](docs\开启工作流.pdf)
 
    ![image-20221031104610020](figures/image-20221031104610020.png)
 
