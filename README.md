@@ -174,7 +174,6 @@ $vi /etc/crontab
 
 ### 3. Github Actions（推荐）
 
-<iframe src="https://scribehow.com/embed/Github_Action__kPH0UDb-R_yMNhnYRG8ejw" width="640" height="640" allowfullscreen frameborder="0"></iframe>
 
 1. fork项目到自己的账户中
 
