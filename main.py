@@ -176,29 +176,28 @@ def submit(data):
     # print(url1.group()[1:-1])
 
 if __name__ == '__main__':
-    # notify = Notify()
+    notify = Notify()
     users = get_users()
     retry = 5 # 打卡失败重试次数
     for user in users:
-        print(user['uid'],user['upw'],user['key'])
-        # try:
-        #     hh28 = get_hh28()
-        #     refer, url = login(user, hh28)
-        #     permit_data = get_permit_data(refer, url)
-        #     if permit_data: # 如果未填报则开始填报
-        #         submit_data = ready_submit(data=permit_data, refer=url)
-        #         submit_data = parse_submit_data(submit_data, 'submit_data.json')
-        #         result = submit(submit_data)
-        #         notify.send(user['key'], user['uid'], result)
-        #     else: # 已经打过卡也发送通知
-        #         result = "今日您已经填报过了"
-        #         notify.send(user['key'], user['uid'], result)
-        # except ex.SSLError:
-        #     retry = retry - 1
-        #     if retry >= 0:
-        #         users.append(user) # 打卡失败重试
-        #     else:
-        #         result = "SSLError: 打卡失败，请手动打卡！"
-        #         notify.send(user['key'], user['uid'], result)
-        # time.sleep(10) # 账号间打卡间隔10s
+        try:
+            hh28 = get_hh28()
+            refer, url = login(user, hh28)
+            permit_data = get_permit_data(refer, url)
+            if permit_data: # 如果未填报则开始填报
+                submit_data = ready_submit(data=permit_data, refer=url)
+                submit_data = parse_submit_data(submit_data, 'submit_data.json')
+                result = submit(submit_data)
+                notify.send(user['key'], user['uid'], result)
+            else: # 已经打过卡也发送通知
+                result = "今日您已经填报过了"
+                notify.send(user['key'], user['uid'], result)
+        except ex.SSLError:
+            retry = retry - 1
+            if retry >= 0:
+                users.append(user) # 打卡失败重试
+            else:
+                result = "SSLError: 打卡失败，请手动打卡！"
+                notify.send(user['key'], user['uid'], result)
+        time.sleep(10) # 账号间打卡间隔10s
 
