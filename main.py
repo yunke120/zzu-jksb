@@ -34,15 +34,18 @@ def get_users():
     USERS = os.environ['UID']
     PWD = os.environ['UPW']
     SCKEY = os.environ['KEY']
+    ADDR = os.environ['ADDR']
     user_list = USERS.split('&')
     pwd_list = PWD.split('&')
     sckey_list = SCKEY.split('&')
+    addr_list = ADDR.split('&')
     # assert len(user_list) == len(pwd_list)
-    for u, p, k in zip(user_list,pwd_list,sckey_list):
+    for u, p, k, a in zip(user_list,pwd_list,sckey_list,addr_list):
         user = dict()
         user['uid'] = u
         user['upw'] = p
         user['key'] = k
+        user['addr'] = a
         users.append(user)
 
     return users
@@ -148,9 +151,32 @@ def ready_submit(data, refer):
         submit_data[i.attrs.get('name')] = i.attrs.get('value')
     return submit_data
 
+# 逆地址解码
+# addr:经纬度
+# return:省 市 街道地址门牌号 ('41', '4101', '科学大道100号')
+def geocoder(addr):
+    url = f'https://restapi.amap.com/v3/geocode/regeo?output=json&location={addr}&key=af3d0194d3e0b6d626bd708cb823ed97'
 
-def parse_submit_data(data, json_file):
+    headers = {
+        'Host': 'restapi.amap.com',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'
+    }
+
+    response = requests.get(url=url, headers=headers)
+    response.encoding = 'utf-8'
+    obj = json.loads(response.content)
+    adcode = obj['regeocode']['addressComponent']['adcode']
+    street = obj['regeocode']['addressComponent']['streetNumber']['street']
+    number = obj['regeocode']['addressComponent']['streetNumber']['number']
+    myvs_13a = adcode[0:2]
+    myvs_13b = adcode[0:4]
+    myvs_13c = street+number
+    return myvs_13a,myvs_13b,myvs_13c
+
+
+def parse_submit_data(addr, data, json_file):
     submit_data = read_json(json_file)
+    submit_data['myvs_13a'],submit_data['myvs_13b'],submit_data['myvs_13c'] = geocoder(addr)
     submit_data.update(data)
     return submit_data
 
@@ -186,7 +212,7 @@ if __name__ == '__main__':
             permit_data = get_permit_data(refer, url)
             if permit_data: # 如果未填报则开始填报
                 submit_data = ready_submit(data=permit_data, refer=url)
-                submit_data = parse_submit_data(submit_data, 'submit_data.json')
+                submit_data = parse_submit_data(user['addr'], submit_data, 'submit_data.json')
                 result = submit(submit_data)
                 notify.send(user['key'], user['uid'], result)
             else: # 已经打过卡也发送通知
@@ -199,5 +225,6 @@ if __name__ == '__main__':
             else:
                 result = "SSLError: 打卡失败，请手动打卡！"
                 notify.send(user['key'], user['uid'], result)
+        break
         time.sleep(10) # 账号间打卡间隔10s
 

@@ -39,5 +39,6 @@ jobs:
         UPW: ${{ secrets.UPW }}
         UID: ${{ secrets.UID }}
         KEY: ${{ secrets.KEY }}
+        ADDR: ${{ secrets.ADDR }}
       run: |
         python main.py
