@@ -165,18 +165,19 @@ def geocoder(addr):
     response = requests.get(url=url, headers=headers)
     response.encoding = 'utf-8'
     obj = json.loads(response.content)
+    formatted_address = obj['regeocode']['formatted_address']
     adcode = obj['regeocode']['addressComponent']['adcode']
     street = obj['regeocode']['addressComponent']['streetNumber']['street']
     number = obj['regeocode']['addressComponent']['streetNumber']['number']
     myvs_13a = adcode[0:2]
     myvs_13b = adcode[0:4]
     myvs_13c = street+number
-    return myvs_13a,myvs_13b,myvs_13c
+    return myvs_13a,myvs_13b,myvs_13c,formatted_address
 
-
-def parse_submit_data(addr, data, json_file):
+# 默认打卡地点是 河南省郑州市科学大道100号
+def parse_submit_data(data,json_file,myvs_13a="41",myvs_13b="4101",myvs_13c="科学大道100号",):
     submit_data = read_json(json_file)
-    submit_data['myvs_13a'],submit_data['myvs_13b'],submit_data['myvs_13c'] = geocoder(addr)
+    submit_data['myvs_13a'],submit_data['myvs_13b'],submit_data['myvs_13c'] = myvs_13a,myvs_13b,myvs_13c
     submit_data.update(data)
     return submit_data
 
@@ -207,24 +208,24 @@ if __name__ == '__main__':
     retry = 5 # 打卡失败重试次数
     for user in users:
         try:
+            myvs_13a,myvs_13b,myvs_13c,formatted_address = geocoder(user['addr'])
             hh28 = get_hh28()
             refer, url = login(user, hh28)
             permit_data = get_permit_data(refer, url)
             if permit_data: # 如果未填报则开始填报
                 submit_data = ready_submit(data=permit_data, refer=url)
-                submit_data = parse_submit_data(user['addr'], submit_data, 'submit_data.json')
+                submit_data = parse_submit_data(submit_data, 'submit_data.json',myvs_13a,myvs_13b,myvs_13c)
                 result = submit(submit_data)
-                notify.send(user['key'], user['uid'], result)
+                notify.send(user['key'], user['uid'], result, formatted_address)
             else: # 已经打过卡也发送通知
                 result = "今日您已经填报过了"
-                notify.send(user['key'], user['uid'], result)
+                notify.send(user['key'], user['uid'], result, formatted_address)
         except ex.SSLError:
             retry = retry - 1
             if retry >= 0:
                 users.append(user) # 打卡失败重试
             else:
                 result = "SSLError: 打卡失败，请手动打卡！"
-                notify.send(user['key'], user['uid'], result)
-        break
+                notify.send(user['key'], user['uid'], result, formatted_address)
         time.sleep(10) # 账号间打卡间隔10s
 
