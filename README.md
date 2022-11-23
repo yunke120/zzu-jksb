@@ -7,8 +7,10 @@
 ## 公告
 
 > 仓库持续更新，欢迎star，关注动态
+>
+> 首次使用请参考[Github Actions](https://github.com/yunke120/zzu-jksb#3-github-actions%E6%8E%A8%E8%8D%90)，已经`fork`过仓库的小伙伴请[更新](https://github.com/yunke120/zzu-jksb#%E5%85%B6%E4%BB%96)仓库，[贡献](https://github.com/yunke120/zzu-jksb#%E5%85%B6%E4%BB%96)代码请细读本文件
 
-2022年11月23日：打卡地点可通过添加环境变量`ADDR`来修改，放假回家的小伙伴请[更新](https://github.com/yunke120/zzu-jksb#%E5%85%B6%E4%BB%96)仓库，并添加环境变量`ADDR`，详细说明请参考以下说明。
+2022年11月23日：打卡地点可通过添加环境变量`ADDR`来修改，`ADDR`为你所要打卡地点的[经纬度](https://lbs.amap.com/demo/javascript-api/example/geocoder/regeocoding)值，更多信息请参考以下说明。
 
 
 
@@ -172,3 +174,9 @@ $vi /etc/crontab
 2. 仓库**更新**：通过点击`Sync fork`即可更新最新仓库
 
    ![image-20221123223403786](figures/image-20221123223403786.png)
+
+3. **贡献**代码：
+
+   首先`fork`仓库到自己的账号中，再克隆到本地，在本地搭建开发环境，测试好代码后上传到自己的仓库中，并点击**Contribute**提出`Pull requests`即可
+
+4. 如脚本出现问题，请在[Issue](https://github.com/yunke120/zzu-jksb/issues)中提出问题，会尽快更新。
