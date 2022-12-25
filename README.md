@@ -12,7 +12,7 @@
 
 2022年11月23日：打卡地点可通过添加环境变量`ADDR`来修改，`ADDR`为你所要打卡地点的[经纬度](https://lbs.amap.com/demo/javascript-api/example/geocoder/regeocoding)值，更多信息请参考以下说明。
 
-2022年12月25日：关闭工作流，关停仓库。
+2022年12月25日：[关闭工作流](https://github.com/yunke120/zzu-jksb#%E5%85%B6%E4%BB%96)，关停仓库。
 
 ![image-20221225113827675](figures/image-20221225113827675.png)
 
@@ -182,3 +182,7 @@ $vi /etc/crontab
    首先`fork`仓库到自己的账号中，再克隆到本地，在本地搭建开发环境，测试好代码后上传到自己的仓库中，并点击**Contribute**提出`Pull requests`即可
 
 4. 如脚本出现问题，请在[Issue](https://github.com/yunke120/zzu-jksb/issues)中提出问题，会尽快更新。
+
+5. **关闭**工作流
+
+   ![image-20221225114833005](figures/image-20221225114833005.png)
